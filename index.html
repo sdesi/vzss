@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Моё мини-приложение</title>
+    <script src="https://telegram.org/js/telegram-web-app.js?59"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--tg-theme-bg-color, #ffffff); /* Цвет фона от Telegram */
+            color: var(--tg-theme-text-color, #000000); /* Цвет текста */
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: var(--tg-theme-button-color, #0088cc);
+            color: var(--tg-theme-button-text-color, #ffffff);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="greeting">Привет!</h1>
+    <button id="sendBtn">Отправить сообщение боту</button>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.ready(); // Готовим приложение
+
+        // Получаем имя пользователя из Telegram
+        const user = tg.initDataUnsafe.user;
+        document.getElementById('greeting').innerText = `Привет, ${user ? user.first_name : 'пользователь'}!`;
+
+        // Меняем цвета, если тема Telegram изменилась
+        tg.onEvent('themeChanged', function() {
+            document.body.style.backgroundColor = tg.themeParams.bg_color;
+        });
+
+        // Кнопка отправляет данные боту и закрывает app
+        document.getElementById('sendBtn').addEventListener('click', function() {
+            tg.sendData('Привет из мини-приложения!');
+            tg.close();
+        });
+
+        tg.expand(); // Разворачиваем на весь экран
+    </script>
+</body>
+</html>/
